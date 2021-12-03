@@ -18,8 +18,8 @@ function playerPlay(){
     return prompt("What is your move? Choose carefully.")
 }
 
-/* Play the game */
-function playGame(playerSelection, computerSelection){
+/* Play one round and return the result */
+function playRound(playerSelection, computerSelection){
     //Initialize result variable
     let result = " ";
     
@@ -56,26 +56,68 @@ function playGame(playerSelection, computerSelection){
         result = "forfeit";
     }
 
-    //Return the result message
-    if(result === "win"){
-        return `You won! ${playerSelection} beats ${computerSelection}.`;
-    } else if(result === "lose"){
-        return `Oh no, you lost! ${computerSelection} beats ${playerSelection}.`;
-    } else if(result === "tie"){
-        creturn `It's a tie! You both chose ${playerSelection}.`;
-    } else{
-        return `That doesn't look right. You forfeit!`;
-    } 
+    //Format the player and computers moves for the result string. I.E. change "rock" to "Rock"
+    let selectionFormatter = playerSelection;
+    playerSelection = selectionFormatter.charAt(0).toUpperCase() + selectionFormatter.slice(1);
+    selectionFormatter = computerSelection;
+    computerSelection = selectionFormatter.charAt(0).toUpperCase() + selectionFormatter.slice(1);
+
+    //Return the result of the round
+    return result;
 }
 
-//Determine player/computer moves
-const playerSelection = playerPlay();
-const computerSelection = computerPlay();
+/* Plays 5 rounds of the game, keeping score, and reporting the overall winner and loser */
+function game(){
+    //Initialize results for each round and overall scorelines. Result references the player's standing after each round.
+    let roundResult = " ";
+    let playerScore = 0;
+    let computerScore = 0;
+    let gamesPlayed = 0;
+    
+    for(let i = 0; i < 5; i++){
+        //Determine the moves
+        const playerSelection = playerPlay();
+        const computerSelection = computerPlay();
 
-//Test code to read player move's value
-console.log(playerSelection);
+        //Play the round
+        roundResult = playRound(playerSelection, computerSelection);
+
+        //Report the round result
+        if(roundResult === "win"){
+            console.log(`Round won! ${playerSelection} beats ${computerSelection}.`);
+        } else if(roundResult === "lose"){
+            console.log(`Round lost! ${computerSelection} beats ${playerSelection}.`);
+        } else if(roundResult === "tie"){
+            console.log(`Round tie! You both chose ${playerSelection}.`);
+        } else{
+           console.log(`Round forfeit! That's not a valid move.`);
+        } 
+
+        //Tally the score
+        if(roundResult === "win"){
+            playerScore++;
+        } else if(roundResult === "tie"){
+            //Do nothing
+        } else{
+            computerScore++;
+        }
+    }
+
+    //Report the overall winner and loser
+    if(playerScore > computerScore){
+        console.log("You win!")
+    } else if (playerScore < computerScore){
+        console.log("You lost!")
+    } else{
+        console.log("It's a tie!")
+    }
+
+    //Report the final scorelines
+    console.log(`Player: ${playerScore} Computer: ${computerScore}`)
+}
 
 //Play the game
-playGame(playerSelection, computerSelection);
+game();
+
 
 
