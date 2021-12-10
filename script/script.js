@@ -1,57 +1,52 @@
 /* Computer's move */
-function computerPlay(){
+function computerPlay() {
     //Generate a random number between 0 and 2
-    let roll = Math.floor(Math.random()*3);
+    let roll = Math.floor(Math.random() * 3);
 
     //Depending on roll, determine the computer's move (1/3 odds per).
-    if(roll === 0){
+    if (roll === 0) {
         return "rock";
-    } else if (roll === 1){
+    } else if (roll === 1) {
         return "paper";
     } else {
         return "scissors";
     }
 }
 
-/* Player's move */
-function playerPlay(){
-    return prompt("What is your move? Choose carefully.")
-}
-
 /* Play one round and return the result */
-function playRound(playerSelection, computerSelection){
+function playRound(playerSelection, computerSelection) {
     //Initialize result variable
     let result = " ";
-    
+
     //Convert player's move to lowercase for case insensitive comparisons
     playerSelection = playerSelection.toLowerCase();
 
     //Check what the player's selection was, then determine the result of the game
-    if(playerSelection === "rock"){
-        if(computerSelection === "paper"){
+    if (playerSelection === "rock") {
+        if (computerSelection === "paper") {
             result = "lose";
-        } else if (computerSelection === "scissors"){
+        } else if (computerSelection === "scissors") {
             result = "win";
-        } else{
+        } else {
             result = "tie";
         }
-    } else if(playerSelection === "paper"){
-        if(computerSelection === "rock"){
+    } else if (playerSelection === "paper") {
+        if (computerSelection === "rock") {
             result = "win";
-        } else if (computerSelection === "scissors"){
+        } else if (computerSelection === "scissors") {
             result = "lose";
-        } else{
+        } else {
             result = "tie";
         }
-    } else if(playerSelection === "scissors"){
-        if(computerSelection === "rock"){
+    } else if (playerSelection === "scissors") {
+        if (computerSelection === "rock") {
             result = "lose";
-        } else if (computerSelection === "paper"){
+        } else if (computerSelection === "paper") {
             result = "win";
-        } else{
+        } else {
             result = "tie";
         }
-    } else{
+    } else {
         //Forfeit if the move was not valid at all
         result = "forfeit";
     }
@@ -66,58 +61,14 @@ function playRound(playerSelection, computerSelection){
     return result;
 }
 
-/* Plays 5 rounds of the game, keeping score, and reporting the overall winner and loser */
-function game(){
-    //Initialize results for each round and overall scorelines. Result references the player's standing after each round.
-    let roundResult = " ";
-    let playerScore = 0;
-    let computerScore = 0;
-    let gamesPlayed = 0;
-    
-    for(let i = 0; i < 5; i++){
-        //Determine the moves
-        const playerSelection = playerPlay();
-        const computerSelection = computerPlay();
+let playerScore = 0;
+let computerScore = 0;
 
-        //Play the round
-        roundResult = playRound(playerSelection, computerSelection);
-
-        //Report the round result
-        if(roundResult === "win"){
-            console.log(`Round won! ${playerSelection} beats ${computerSelection}.`);
-        } else if(roundResult === "lose"){
-            console.log(`Round lost! ${computerSelection} beats ${playerSelection}.`);
-        } else if(roundResult === "tie"){
-            console.log(`Round tie! You both chose ${playerSelection}.`);
-        } else{
-           console.log(`Round forfeit! That's not a valid move.`);
-        } 
-
-        //Tally the score
-        if(roundResult === "win"){
-            playerScore++;
-        } else if(roundResult === "tie"){
-            //Do nothing
-        } else{
-            computerScore++;
-        }
-    }
-
-    //Report the overall winner and loser
-    if(playerScore > computerScore){
-        console.log("You win!")
-    } else if (playerScore < computerScore){
-        console.log("You lost!")
-    } else{
-        console.log("It's a tie!")
-    }
-
-    //Report the final scorelines
-    console.log(`Player: ${playerScore} Computer: ${computerScore}`)
-}
-
-//Play the game
-game();
-
+const buttons = document.querySelectorAll('button');
+buttons.forEach(button => {
+    button.addEventListener('click', () => {
+        console.log(playRound(button.className,computerPlay()));
+    })
+});
 
 
