@@ -20,6 +20,9 @@ function playRound() {
     const computerSelection = computerPlay();
     const playerSelection = this.className;
 
+    // Send out pokemon to battlefield
+    choosePokemon(playerSelection,computerSelection);
+
     // Check what the player's selection against computer's, then determine the result of the game
     if (playerSelection === 'fire') {
         if (computerSelection === 'water') {
@@ -47,6 +50,9 @@ function playRound() {
         }
     }
 
+    // Battle the pokemon
+    pokemonBattle(result);
+
     // Print result
     printResult(result);
 
@@ -73,10 +79,12 @@ function updateScore(result) {
         playerScore++;
         const playerScoreboard = document.querySelector('.player .score');
         playerScoreboard.textContent = playerScore;
-    } else {
+    } else if (result === 'lose'){
         computerScore++;
         const computerScoreboard = document.querySelector('.computer .score');
         computerScoreboard.textContent = computerScore;
+    } else{
+        //do nothing on tie
     }
 }
 
@@ -95,9 +103,9 @@ function resetScore(){
 function determineWinner() {
     const message = document.querySelector('.message');
     if (computerScore === 5) {
-        message.textContent = 'The computer won the game!';
+        message.textContent = 'You whited out!';
     } else {
-        message.textContent = 'You won the game!';
+        message.textContent = 'You defeated Giovanni!';
     }
 
     buttons.forEach(button => {
@@ -110,7 +118,7 @@ function newGame() {
     // Add a button prompting to play again
     const playAgain = document.querySelector('.playAgain');
     const playAgainBtn = document.createElement('button');
-    playAgainBtn.textContent = 'Play again?';
+    playAgainBtn.textContent = 'Rematch?';
     playAgain.appendChild(playAgainBtn);
 
     // Initialize a fresh game
@@ -129,20 +137,57 @@ function initGame() {
     }
     
     const message = document.querySelector('.message');
-    message.textContent = 'Let\'s play a game.';
+    message.textContent = 'Giovanni wants to fight!';
 
     resetScore();
+    choosePokemon();
 
     buttons.forEach(button => {
         button.addEventListener('click', playRound);
     });
 }
 
+/* Send correct pokemon sprites to the battlefield each round */
+function choosePokemon(playerSelection='unknown',computerSelection='unknown'){
+    document.getElementById('player-pokemon').src = `img/${playerSelection}-sprite-player.png`;
+    document.getElementById('computer-pokemon').src = `img/${computerSelection}-sprite-computer.png`;
+}
+
+const pokemon = document.querySelectorAll('.battlefield img');
+pokemon.forEach(pokemon => addEventListener('animationend',removeTransition));
+
+/* Remove the attack or hit transitions when they end */
+function removeTransition(e){
+    if(e.animationName === 'shake'){
+        e.target.classList.remove('hit');
+    } else if(e.animationName === 'attack'){
+        e.target.classList.remove('attacking');
+    } else{
+        return;
+    }
+}
+
+/* Pokemon hit shake movement */
+function pokemonBattle(result){
+    const computerPokemon = document.querySelector('#computer-pokemon');
+    const playerPokemon = document.querySelector('#player-pokemon')
+    
+    if (result === 'win') {
+        playerPokemon.classList.add('attacking');
+        computerPokemon.classList.add('hit');
+    } else if (result === 'lose'){
+        playerPokemon.classList.add('hit');
+        computerPokemon.classList.add('attacking');
+    } else{
+        //do nothing on tie
+    }
+}
+
 // Initialize the first game
 let playerScore = 0;
 let computerScore = 0;
 
-const buttons = document.querySelectorAll('button');
+const buttons = document.querySelectorAll('.player button');
 initGame();
 
 

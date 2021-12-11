@@ -1,15 +1,32 @@
 * {
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: PKMN-RBYGSC;
+    src: url("PKMN\ RBYGSC.ttf");
+}
+
+body {
+    padding: 0% 20%;
+    background-image: url("../img/background.png");
+    background-size: 100%;
+    font-family: PKMN-RBYGSC;
+    color: white;
 }
 
 .message {
     text-align: center;
+    padding: 1em;
+    text-transform: uppercase;
+    font-size: 36px;
 }
 
 .interface {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
 }
 
 .interface .player,
@@ -17,27 +34,26 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    flex: 1 2 auto;
+    flex: 1 1 0;
 }
 
 .sprite {
-    flex: 1;
+    flex: 1 1 0;
     width: 100%;
 }
 
 .buttons {
     display: flex;
-    flex: 1;
     width: 100%;
     justify-content: space-evenly;
 }
 
 .buttons button {
-    background-size: 100%;
+    background-size: cover;
     background-color: transparent;
     border-radius: 50%;
-    width: 100px;
-    height: 100px;
+    height: 64px;
+    width: 64px;
 }
 
 button.fire {
@@ -60,18 +76,53 @@ button.grass {
     width: 50%;
 }
 
-.battlefield img {
-    width: 256px;
-    height: 256px;
+#player-pokemon,
+#computer-pokemon {
+    max-width: 200px;
+    min-width: 128px;
+    max-height: 200px;
+    min-height: 128px;
+    flex: 1;
 }
 
-.battlefield .player-pokemon {
-    transition: transform 0.2s;
+#player-pokemon {
+    --movement: 100%;
+}
+
+#computer-pokemon {
+    --movement: -100%;
+}
+
+.attacking {
+    animation: attack 0.5s;
+}
+
+@keyframes attack{
+    0% { transform: translateX(var(--movement)); }
+}
+
+.hit {
+    animation: shake 0.5s;
+}
+
+@keyframes shake{
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
 }
 
 .scoreboard {
     display: flex;
     justify-content: center;
+    padding: 2em;
     gap: 50px;
 }
 
@@ -80,4 +131,20 @@ button.grass {
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-transform: uppercase;
+    gap: 1em;
+}
+
+.scoreboard .score {
+    font-size: 24px;
+}
+
+.playAgain {
+    text-align: center;
+}
+
+.playAgain button {
+    text-transform: uppercase;
+    font-size: 24px;
+    padding: 0.5em;
 }
